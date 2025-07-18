@@ -1,0 +1,11 @@
+{
+	"id": "quick-input-plugin",
+	"name": "Quick Input Plugin",
+	"version": "1.0.0",
+	"minAppVersion": "0.15.0",
+	"description": "Offser a easy way to input my custom tags.",
+	"author": "HNIdesu",
+	"authorUrl": "https://github.com/HNIdesu",
+	"fundingUrl": "",
+	"isDesktopOnly": false
+}
