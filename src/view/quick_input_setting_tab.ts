@@ -1,4 +1,4 @@
-import QuickInputPlugin from "main";
+import QuickInputPlugin, { DEFAULT_SETTINGS } from "main";
 import { App, PluginSettingTab, Setting } from "obsidian";
 
 export class QuickInputSettingTab extends PluginSettingTab {
@@ -15,12 +15,35 @@ export class QuickInputSettingTab extends PluginSettingTab {
             .setName('Default Author')
             .addText((text) =>
                 text
-                .setPlaceholder("")
+                .setPlaceholder(DEFAULT_SETTINGS.defaultAuthor!)
                 .setValue(this.plugin.settings.defaultAuthor)
                 .onChange(async (value) => {
                     this.plugin.settings.defaultAuthor = value;
                     await this.plugin.saveSettings();
                 })
             );
+            new Setting(containerEl)
+                .setName('Date Format')
+                .addText((text) =>
+                    text
+                    .setPlaceholder(DEFAULT_SETTINGS.dateFormat!)
+                    .setValue(this.plugin.settings.dateFormat)
+                    .onChange(async (value) => {
+                        this.plugin.settings.dateFormat = value;
+                        await this.plugin.saveSettings();
+                    })
+                );
+            new Setting(containerEl)
+                .setName('Time Format')
+                .addText((text) =>
+                    text
+                    .setPlaceholder(DEFAULT_SETTINGS.timeFormat!)
+                    .setValue(this.plugin.settings.timeFormat)
+                    .onChange(async (value) => {
+                        this.plugin.settings.timeFormat = value;
+                        await this.plugin.saveSettings();
+                    })
+                );
+        
     }
 }

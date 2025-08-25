@@ -3,10 +3,14 @@ import { QuickInputSettingTab } from 'view/quick_input_setting_tab';
 
 interface QuickInputPluginSettings {
 	defaultAuthor: string;
+	dateFormat: string;
+	timeFormat: string
 }
 
-const DEFAULT_SETTINGS: Partial<QuickInputPluginSettings> = {
-	defaultAuthor: ""
+export const DEFAULT_SETTINGS: Partial<QuickInputPluginSettings> = {
+	defaultAuthor: "",
+	dateFormat: "YYYY-MM-DD",
+	timeFormat: "HH:mm"
 };
 
 export default class QuickInputPlugin extends Plugin {
@@ -37,7 +41,7 @@ export default class QuickInputPlugin extends Plugin {
 			name: "Insert Time Tag",
 			editorCallback: (editorCallback) => {
 				const cursorPosition = editorCallback.getCursor();
-				const toInsert = `\\[Time\\]${moment().format("HH:mm")}\n`;
+				const toInsert = `\\[Time\\]${moment().format(this.settings.timeFormat)}\n`;
 				editorCallback.replaceRange(toInsert, cursorPosition);
 				editorCallback.setCursor(cursorPosition.line + 1,0);
 			}
@@ -47,7 +51,7 @@ export default class QuickInputPlugin extends Plugin {
 			name: "Insert Date Tag",
 			editorCallback: (editorCallback) => {
 				const cursorPosition = editorCallback.getCursor();
-				const toInsert = `\\[Date\\]${moment().format("YYYY-MM-DD")}\n`;
+				const toInsert = `\\[Date\\]${moment().format(this.settings.dateFormat)}\n`;
 				editorCallback.replaceRange(toInsert, cursorPosition);
 				editorCallback.setCursor(cursorPosition.line + 1,0);
 			}
