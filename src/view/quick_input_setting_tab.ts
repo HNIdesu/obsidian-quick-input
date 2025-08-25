@@ -44,6 +44,27 @@ export class QuickInputSettingTab extends PluginSettingTab {
                         await this.plugin.saveSettings();
                     })
                 );
-        
+            new Setting(containerEl)
+                .setName('Host Name')
+                .addText((text) =>
+                    text
+                    .setPlaceholder(DEFAULT_SETTINGS.hostName!)
+                    .setValue(this.plugin.settings.hostName)
+                    .onChange(async (value) => {
+                        this.plugin.settings.hostName = value;
+                        await this.plugin.saveSettings();
+                    })
+                );
+            new Setting(containerEl)
+                .setName('Port Number')
+                .addText((text) =>
+                    text
+                    .setPlaceholder(DEFAULT_SETTINGS.port!.toString())
+                    .setValue(this.plugin.settings.port.toString())
+                    .onChange(async (value) => {
+                        this.plugin.settings.port = parseInt(value);
+                        await this.plugin.saveSettings();
+                    })
+                );
     }
 }

@@ -1,16 +1,20 @@
-import { Plugin, moment } from 'obsidian';
+import { Notice, Plugin, moment } from 'obsidian';
 import { QuickInputSettingTab } from 'view/quick_input_setting_tab';
 
 interface QuickInputPluginSettings {
 	defaultAuthor: string;
 	dateFormat: string;
-	timeFormat: string
+	timeFormat: string,
+	hostName: string,
+	port: number
 }
 
 export const DEFAULT_SETTINGS: Partial<QuickInputPluginSettings> = {
 	defaultAuthor: "",
 	dateFormat: "YYYY-MM-DD",
-	timeFormat: "HH:mm"
+	timeFormat: "HH:mm",
+	hostName: "127.0.0.1",
+	port: 3323
 };
 
 export default class QuickInputPlugin extends Plugin {
@@ -23,12 +27,26 @@ export default class QuickInputPlugin extends Plugin {
 			name: "Insert Yaml Header",
 			editorCallback: async (editorCallback) => {
 				const cursorPosition = editorCallback.getCursor();
+				let latitude = ""
+				let longitude = ""
+				let altitude = ""
+				try{
+					const response = await fetch(`http://${this.settings.hostName}:${this.settings.port}/`)
+					if (response.ok) {
+						const json = await response.json()
+						latitude = json.latitude
+						longitude = json.longitude
+						altitude = json.altitude
+					}
+				}catch (ex) {
+					new Notice("Failed to get location")
+				}
 				const toInsert = [
 					"---",
 					`created: ${moment().format("YYYY-MM-DD HH:mm")}`,
-					"latitude: ",
-					"longitude: ",
-					"altitude: ",
+					`latitude: ${latitude}`,
+					`longitude: ${longitude}`,
+					`altitude: ${altitude}`,
 					`author: ${this.settings.defaultAuthor}`,
 					"tags: [ ]",
 					"---\n"];
