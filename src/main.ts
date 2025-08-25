@@ -1,7 +1,19 @@
 import { Plugin, moment } from 'obsidian';
+import { QuickInputSettingTab } from 'view/quick_input_setting_tab';
+
+interface QuickInputPluginSettings {
+	defaultAuthor: string;
+}
+
+const DEFAULT_SETTINGS: Partial<QuickInputPluginSettings> = {
+	defaultAuthor: ""
+};
 
 export default class QuickInputPlugin extends Plugin {
-	onload() {
+	settings: QuickInputPluginSettings;
+	async onload() {
+		await this.loadSettings();
+		this.addSettingTab(new QuickInputSettingTab(this.app, this));
 		this.addCommand({
 			id: "insert-yaml-header",
 			name: "Insert Yaml Header",
@@ -13,7 +25,7 @@ export default class QuickInputPlugin extends Plugin {
 					"latitude: ",
 					"longitude: ",
 					"altitude: ",
-					"author: ",
+					`author: ${this.settings.defaultAuthor}`,
 					"tags: [ ]",
 					"---\n"];
 				editorCallback.replaceRange(toInsert.join("\n"),cursorPosition);
@@ -53,4 +65,12 @@ export default class QuickInputPlugin extends Plugin {
 	}
 	onunload() {
 	}
+	async loadSettings() {
+		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
+	}
+	
+	async saveSettings() {
+		await this.saveData(this.settings);
+	}
 }
+
