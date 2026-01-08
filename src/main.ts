@@ -31,7 +31,7 @@ export default class QuickInputPlugin extends Plugin {
 				let longitude = ""
 				let altitude = ""
 				try{
-					const response = await fetch(`http://${this.settings.hostName}:${this.settings.port}/`)
+					const response = await fetch(`http://${this.settings.hostName}:${this.settings.port}/location`)
 					if (response.ok) {
 						const json = await response.json()
 						latitude = json.latitude

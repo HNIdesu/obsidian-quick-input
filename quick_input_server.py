@@ -30,12 +30,12 @@ class Logger:
         if self.verbose:
             print(f"{self._prefix('DEBUG')} {colorama.Fore.GREEN}{message}")
 
-class LocationServerHandler(BaseHTTPRequestHandler):
+class QuickInputServerHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         user_agent = self.headers.get('User-Agent', "")
         origin = 'http://localhost' if "Android" in user_agent else 'app://obsidian.md'
 
-        if self.path == "/":
+        if self.path == "/location":
             file_path = "termux_location_result"
             if p.exists(file_path):
                 self.send_response(200)
@@ -82,8 +82,8 @@ parser.add_argument("--location-timeout",default=30,type=float,required=False)
 parser.add_argument("--location-interval",default=30,type=float,required=False)
 args = parser.parse_args()
 
-logger = Logger("location-server",verbose=args.verbose)
-server = HTTPServer((args.bind_address,args.port),RequestHandlerClass=LocationServerHandler)
+logger = Logger("quick-input-server",verbose=args.verbose)
+server = HTTPServer((args.bind_address,args.port),RequestHandlerClass=QuickInputServerHandler)
 Thread(target=server.serve_forever).start()
 logger.log(f"Listening on {args.bind_address}:{args.port}...")
 
