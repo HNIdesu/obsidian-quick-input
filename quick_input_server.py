@@ -6,6 +6,7 @@ from datetime import datetime as DateTime
 import colorama
 import os.path as p
 from http.server import HTTPServer,BaseHTTPRequestHandler
+import json as j
 
 class Logger:
     def __init__(self, name="server",verbose=False):
@@ -100,9 +101,12 @@ while True:
             logger.warn(f"termux-location failed: {result.stderr.decode().strip()}")
         else:
             location_data = result.stdout.decode("utf-8").strip()
-            logger.debug(f"Location: {location_data}")
-            with open("termux_location_result", "w", encoding="utf-8") as f:
-                f.write(location_data)
+            if location_data == "" or j.loads(location_data).get("error"):
+                logger.warn(f"termux-location error: {location_data}")
+            else:
+                logger.debug(f"Location: {location_data}")
+                with open("termux_location_result", "w", encoding="utf-8") as f:
+                    f.write(location_data)
 
         time.sleep(args.location_interval)
 
