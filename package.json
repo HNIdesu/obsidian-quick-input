@@ -1,6 +1,6 @@
 {
 	"name": "obsidian-quick-input-plugin",
-	"version": "1.0.1",
+	"version": "1.1.0",
 	"description": "Offser a easy way to input my custom tags.",
 	"main": "main.js",
 	"scripts": {
