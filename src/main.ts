@@ -50,7 +50,7 @@ export default class QuickInputPlugin extends Plugin {
 					`author: ${this.settings.defaultAuthor}`,
 					"tags: [ ]",
 					"---\n"];
-				editorCallback.replaceRange(toInsert.join("\n"),cursorPosition);
+				editorCallback.replaceSelection(toInsert.join("\n"));
 				editorCallback.setCursor(cursorPosition.line + toInsert.length, 0);
 			}
 		})
@@ -60,7 +60,7 @@ export default class QuickInputPlugin extends Plugin {
 			editorCallback: (editorCallback) => {
 				const cursorPosition = editorCallback.getCursor();
 				const toInsert = `\\[Time\\]${moment().format(this.settings.timeFormat)}\n`;
-				editorCallback.replaceRange(toInsert, cursorPosition);
+				editorCallback.replaceSelection(toInsert);
 				editorCallback.setCursor(cursorPosition.line + 1,0);
 			}
 		})
@@ -70,7 +70,7 @@ export default class QuickInputPlugin extends Plugin {
 			editorCallback: (editorCallback) => {
 				const cursorPosition = editorCallback.getCursor();
 				const toInsert = `\\[Date\\]${moment().format(this.settings.dateFormat)}\n`;
-				editorCallback.replaceRange(toInsert, cursorPosition);
+				editorCallback.replaceSelection(toInsert);
 				editorCallback.setCursor(cursorPosition.line + 1,0);
 			}
 		})
@@ -80,7 +80,7 @@ export default class QuickInputPlugin extends Plugin {
 			editorCallback: (editorCallback) => {
 				const cursorPosition = editorCallback.getCursor();
 				const toInsert = "\\[Where\\]";
-				editorCallback.replaceRange(toInsert,cursorPosition);
+				editorCallback.replaceSelection(toInsert);
 				editorCallback.setCursor(cursorPosition.line,cursorPosition.ch + toInsert.length);
 			}
 		})
