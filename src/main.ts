@@ -17,6 +17,21 @@ export const DEFAULT_SETTINGS: Partial<QuickInputPluginSettings> = {
 	port: 3323
 };
 
+function fetchWithTimeout(url: string, ms: number): Promise<any> {
+  const controller = new AbortController();
+
+  const timeout = new Promise((_, reject) =>
+    setTimeout(() => {
+      controller.abort();
+      reject(new Error("Timeout"));
+    }, ms)
+  );
+
+  const request = fetch(url, { signal: controller.signal });
+
+  return Promise.race([request, timeout]);
+}
+
 export default class QuickInputPlugin extends Plugin {
 	settings: QuickInputPluginSettings;
 	async onload() {
@@ -31,7 +46,8 @@ export default class QuickInputPlugin extends Plugin {
 				let longitude = ""
 				let altitude = ""
 				try{
-					const response = await fetch(`http://${this.settings.hostName}:${this.settings.port}/location`)
+					const response = await 
+						fetchWithTimeout(`http://${this.settings.hostName}:${this.settings.port}/location`, 10000) as Response
 					if (response.ok) {
 						const json = await response.json()
 						latitude = json.latitude
